@@ -19,5 +19,6 @@
 
 #define DELIM " \n\t"
 
+void execute_command(char **tokens);
 
 #endif

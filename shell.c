@@ -10,7 +10,6 @@ int main (void)
 	char *command = NULL, *commandCopy, **tokens = NULL, *token = NULL;
 	size_t n = 0;
 	int i;
-	pid_t pid;
 
 	while (1)
 	{
@@ -50,22 +49,8 @@ int main (void)
 			token = strtok(NULL, DELIM);
 		}
 		tokens[i] = NULL;
-		if ((pid = fork()) == -1)
-		{
-			perror("Error: Failed to fork the current process.\n");
-			exit(EXIT_FAILURE);
-		}
-		if (pid == 0) /*Execute the command in the child process*/
-		{
-			if (execve(tokens[0], tokens, NULL) == -1)
-			{
-				perror("Error: No such file or directory.\n");
-			}
-		}
-		else
-		{
-			wait(NULL);
-		}
+		/*handles execution */
+		execute_command(tokens);
 	}
 	free(command);
 	free(commandCopy);
