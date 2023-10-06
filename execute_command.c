@@ -72,7 +72,6 @@ void search_and_execute_command(char **tokens)
 			}
 			if (access(commandPath, X_OK) == 0)
 			{
-				printf("The file at %s is executable.\n", commandPath);
 				if (execve(commandPath, tokens, environ) == -1) /* Execute the command */
 				{
 					perror("Error: Failed to execute the command.\n");
