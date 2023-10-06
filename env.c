@@ -11,6 +11,11 @@ void print_env(void)
 	extern char **environ;
 	int i;
 
+	if (environ[0] == NULL)
+	{
+		printf("No environment variables found.\n");
+		return;
+	}
 	for (i = 0; environ[i] != NULL; i++)
 	{
 		printf("%s\n", environ[i]);

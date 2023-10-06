@@ -37,14 +37,7 @@ void search_and_execute_command(char **tokens)
 {
 	char *path, *commandPath, *pathCopy, *token = NULL;
 
-	/*if (strcmp(tokens[0], "\n") == 0)*/
-	/*{*/
-		/* call loop to print prompt again*/
-	/*}*/
-	if (strcmp(tokens[0], "env") == 0)
-	{
-		print_env();
-	}
+
 	if (strchr(tokens[0], '/') != NULL) /* Check if command contains a path*/
 	{
 		if (execve(tokens[0], tokens, NULL) == -1)
@@ -84,4 +77,6 @@ void search_and_execute_command(char **tokens)
 		}
 		free(pathCopy);
 	}
+	printf("Error: '%s' is not a valid command.\n", tokens[0]);
+	exit(EXIT_FAILURE);
 }
