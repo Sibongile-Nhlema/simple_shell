@@ -19,8 +19,14 @@
 
 #define DELIM " \n\t"
 
+/* global var for environ */
+extern char **environ;
+
 void execute_command(char **tokens);
 char **splitLine(char *line);
 void freeTokens(char **tokens);
 void search_and_execute_command(char **tokens);
+void print_env(void);
+void runShell(void);
+
 #endif
