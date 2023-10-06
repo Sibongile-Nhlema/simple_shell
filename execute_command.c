@@ -11,7 +11,9 @@ void execute_command(char **tokens)
 {
 	pid_t pid;
 
-	if ((pid = fork()) == -1)
+	pid = fork();
+
+	if ((pid) == -1)
 	{
 		perror("Error: Failed to fork the current process.\n");
 		exit(EXIT_FAILURE);

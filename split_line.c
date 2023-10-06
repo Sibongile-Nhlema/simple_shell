@@ -2,6 +2,7 @@
 
 /**
  * splitLine - Splits a line into tokens
+ * @line: commands on commandline
  *
  * Return: An array of pointers to tokens
  */

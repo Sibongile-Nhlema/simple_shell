@@ -5,7 +5,7 @@
  *
  * Return: 0
  */
-int main (void)
+int main(void)
 {
 	char *line = NULL, **tokens = NULL;
 	size_t lineSize = 0;
