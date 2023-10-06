@@ -65,6 +65,11 @@ void search_and_execute_command(char **tokens)
 					perror("Error: Failed to execute the command.\n");
 					exit(EXIT_FAILURE);
 				}
+				else
+				{
+					perror("Error: No such file or directory.\n");
+					exit(EXIT_FAILURE);
+				}
 			}
 			free(commandPath);
 			token = strtok(NULL, ":"); /* Move to next directory in PATH */
