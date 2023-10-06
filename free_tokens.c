@@ -2,6 +2,7 @@
 
 /**
  * freeTokens - Frees the tokens array
+ * @tokens: command  and arguments inputted
  */
 void freeTokens(char **tokens)
 {

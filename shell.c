@@ -5,11 +5,10 @@
  *
  * Return: 0
  */
-int main (void)
+int main(void)
 {
 	char *line = NULL, **tokens = NULL;
 	size_t lineSize = 0;
-	pid_t pid;
 
 	while (1)
 	{
@@ -29,25 +28,8 @@ int main (void)
 		}
 
 		tokens = splitLine(line); /*Split the line into tokens*/
-		if (tokens == NULL)
-			exit(EXIT_FAILURE);
-
-		if ((pid = fork()) == -1)
-		{
-			perror("Error: Failed to fork the current process.\n");
-			exit(EXIT_FAILURE);
-		}
-		if (pid == 0) /*Execute the command in the child process*/
-		{
-			if (execve(tokens[0], tokens, NULL) == -1)
-			{
-				perror("Error: No such file or directory.\n");
-			}
-		}
-		else
-		{
-			wait(NULL);
-		}
+		/*handles execution */
+		execute_command(tokens);
 	}
 	free(line);
 	freeTokens(tokens);
