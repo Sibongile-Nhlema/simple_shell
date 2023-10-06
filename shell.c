@@ -7,16 +7,15 @@
  */
 int main (void)
 {
-	char *command = NULL, *commandCopy, **tokens = NULL, *token = NULL;
-	size_t n = 0;
-	int i;
+	char *line = NULL, **tokens = NULL;
+	size_t lineSize = 0;
 	pid_t pid;
 
 	while (1)
 	{
 		printf("$ ");
 
-		if (getline(&command, &n, stdin) == -1) /*Get the command line*/
+		if (getline(&line, &lineSize, stdin) == -1) /*Read a line from stdin*/
 		{
 			if (feof(stdin))
 			{
@@ -25,31 +24,14 @@ int main (void)
 			else
 			{
 				perror("Error: Failed to read command line.\n");
-				exit(EXIT_FAILURE); /*Should we exit??*/
+				exit(EXIT_FAILURE);
 			}
 		}
-		commandCopy = strdup(command);
-		token = strtok(command, DELIM); /*Count the tokens*/
-		i = 0;
-		while (token != NULL)
-		{
-			i++;
-			token = strtok(NULL, DELIM);
-		}
-		tokens = malloc(i * sizeof(char *));
+
+		tokens = splitLine(line); /*Split the line into tokens*/
 		if (tokens == NULL)
-		{
 			exit(EXIT_FAILURE);
-		}
-		i = 0;
-		token = strtok(commandCopy, DELIM); /*Add tokens to the tokens array*/
-		while (token != NULL)
-		{
-			tokens[i] = token;
-			i++;
-			token = strtok(NULL, DELIM);
-		}
-		tokens[i] = NULL;
+
 		if ((pid = fork()) == -1)
 		{
 			perror("Error: Failed to fork the current process.\n");
@@ -67,8 +49,7 @@ int main (void)
 			wait(NULL);
 		}
 	}
-	free(command);
-	free(commandCopy);
-	free(tokens);
+	free(line);
+	freeTokens(tokens);
 	return (0);
 }
