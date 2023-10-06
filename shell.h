@@ -17,5 +17,7 @@
 /* error handling */
 #include <errno.h>
 
+#define DELIM " \n\t"
+
 
 #endif
