@@ -25,25 +25,10 @@ void execute_command(char **tokens)
 	{
 		if (strchr(tokens[0], '/') != NULL) /* Check if the command contains a path */
 		{
-			if ((pid = fork()) == -1)
+			if (execve(tokens[0], tokens, NULL) == -1)
 			{
-				perror("Error: Failed to fork the current process.\n");
-			}
-			if (pid == 0) /* Execute the command in the child process */
-			{
-				if (strcmp(tokens[0], "exit") == 0)
-				{
-					exit(0);
-				}
-				if (execve(tokens[0], tokens, NULL) == -1)
-				{
-					perror("Error: No such file or directory.\n");
-					exit(EXIT_FAILURE);
-				}
-			}
-			else
-			{
-				wait(NULL);
+				perror("Error: No such file or directory.\n");
+				exit(EXIT_FAILURE);
 			}
 		}
 		else /* Search for the command in the directories specified by the PATH environment variable */
@@ -61,23 +46,10 @@ void execute_command(char **tokens)
 
 				if (stat(commandPath, &st) == 0 && st.st_mode & S_IXUSR) /* Check if the command exists and is executable */
 				{
-					if ((pid = fork()) == -1)
+					if (execve(commandPath, tokens, NULL) == -1)
 					{
-						perror("Error: Failed to fork the current process.\n");
-						return;
-					}
-					if (pid == 0) /* Execute the command in the child process */
-					{
-						if (execve(commandPath, tokens, NULL) == -1)
-						{
-							perror("Error: Failed to execute the command.\n");
-							exit(EXIT_FAILURE);
-						}
-					}
-					else
-					{
-						wait(NULL);
-						return;
+						perror("Error: Failed to execute the command.\n");
+						exit(EXIT_FAILURE);
 					}
 				}
 				free(commandPath);

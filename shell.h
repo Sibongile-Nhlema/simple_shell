@@ -20,5 +20,7 @@
 #define DELIM " \n\t"
 
 void execute_command(char **tokens);
+char **splitLine(char *line);
+void freeTokens(char **tokens);
 
 #endif
