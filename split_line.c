@@ -12,9 +12,22 @@ char **splitLine(char *line)
 	int i;
 
 	lineCopy = strdup(line);
-	token = strtok(line, DELIM); /*Count the tokens*/
+	token = strtok(line, DELIM);
+	if (strcmp(token, "exit") == 0) /*Implement exit built-in*/
+	{
+		tokens = malloc(sizeof(char *));
+		if (tokens == NULL)
+		{
+			free(lineCopy);
+			perror("Error: Failed to allocate memory.\n");
+			return (NULL);
+		}
+		tokens[0] = strdup(token);
+		free(lineCopy);
+		return (tokens);
+	}
 	i = 0;
-	while (token != NULL)
+	while (token != NULL) /*Count the tokens*/
 	{
 		i++;
 		token = strtok(NULL, DELIM);
@@ -22,6 +35,7 @@ char **splitLine(char *line)
 	tokens = malloc((i + 1) * sizeof(char *));
 	if (tokens == NULL)
 	{
+		free(lineCopy);
 		return (NULL);
 	}
 	i = 0;
