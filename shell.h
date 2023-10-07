@@ -19,6 +19,8 @@
 
 #define DELIM " \n\t"
 
+extern char **environ;
+
 void execute_command(char **tokens);
 char **splitLine(char *line);
 void freeTokens(char **tokens);

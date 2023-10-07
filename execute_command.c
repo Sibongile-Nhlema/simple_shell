@@ -37,6 +37,7 @@ void search_and_execute_command(char **tokens)
 {
 	char *path, *commandPath, *pathCopy, *token = NULL;
 
+
 	if (strchr(tokens[0], '/') != NULL) /* Check if command contains a path*/
 	{
 		if (execve(tokens[0], tokens, NULL) == -1)
@@ -51,6 +52,12 @@ void search_and_execute_command(char **tokens)
 		pathCopy = strdup(path);
 		token = strtok(pathCopy, ":"); /* Split PATH str into individual dir */
 
+		if (pathCopy == NULL)
+		{
+			perror("Error: Failed to allocate memory for pathCopy.\n");
+			exit(EXIT_FAILURE);
+		}
+
 		while (token != NULL)
 		{
 			commandPath = malloc(strlen(token) + strlen(tokens[0]) + 2);
@@ -58,9 +65,14 @@ void search_and_execute_command(char **tokens)
 			strcat(commandPath, "/"); /* Append a slash to directory path */
 			strcat(commandPath, tokens[0]);  /* Append command name to directory path */
 
+			if (commandPath == NULL)
+			{
+				perror("Error: Failed to allocate memory for commandPath.\n");
+				exit(EXIT_FAILURE);
+			}
 			if (access(commandPath, X_OK) == 0)
 			{
-				if (execve(commandPath, tokens, NULL) == -1) /* Execute the command */
+				if (execve(commandPath, tokens, environ) == -1) /* Execute the command */
 				{
 					perror("Error: Failed to execute the command.\n");
 					exit(EXIT_FAILURE);
@@ -76,4 +88,6 @@ void search_and_execute_command(char **tokens)
 		}
 		free(pathCopy);
 	}
+	printf("Error: '%s' is not a valid command.\n", tokens[0]);
+	exit(EXIT_FAILURE);
 }
