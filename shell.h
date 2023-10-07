@@ -25,4 +25,12 @@ void execute_command(char **tokens);
 char **splitLine(char *line);
 void freeTokens(char **tokens);
 void search_and_execute_command(char **tokens);
+int myCustomStrcmp(char *str1, char *str2);
+int myCustomStrlen(char *string);
+char *myCustomStrdup(char *string);
+char *myCustomStrchr(char *string, char character);
+char *myCustomGetenv(char *varName);
+char *myCustomStrcpy(char *destination, char *source);
+char *myCustomStrcat(char *destination, char *source);
+
 #endif

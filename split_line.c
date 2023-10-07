@@ -11,9 +11,9 @@ char **splitLine(char *line)
 	char *lineCopy, *token, **tokens;
 	int i;
 
-	lineCopy = strdup(line);
+	lineCopy = myCustomStrdup(line);
 	token = strtok(line, DELIM);
-	if (strcmp(token, "exit") == 0) /*Implement exit built-in*/
+	if (myCustomStrcmp(token, "exit") == 0) /*Implement exit built-in*/
 	{
 		tokens = malloc(sizeof(char *));
 		if (tokens == NULL)
@@ -22,7 +22,7 @@ char **splitLine(char *line)
 			perror("Error: Failed to allocate memory.\n");
 			return (NULL);
 		}
-		tokens[0] = strdup(token);
+		tokens[0] = myCustomStrdup(token);
 		free(lineCopy);
 		return (tokens);
 	}
@@ -42,7 +42,7 @@ char **splitLine(char *line)
 	token = strtok(lineCopy, DELIM); /*Add tokens to the tokens array*/
 	while (token != NULL)
 	{
-		tokens[i] = strdup(token);
+		tokens[i] = myCustomStrdup(token);
 		i++;
 		token = strtok(NULL, DELIM);
 	}
