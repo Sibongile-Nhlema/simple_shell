@@ -8,8 +8,17 @@ void freeTokens(char **tokens)
 {
 	int i;
 
+	if (tokens == NULL)
+		return;
+
+
 	for (i = 0; tokens[i] != NULL; i++)
 	{
+		if (strcmp(tokens[i], "exit") == 0)
+		{
+			free(tokens[i]);
+			break;
+		}
 		free(tokens[i]);
 	}
 	free(tokens);

@@ -26,8 +26,15 @@ int main(void)
 				exit(EXIT_FAILURE);
 			}
 		}
-
+		freeTokens(tokens); /*Free previous allocation*/
 		tokens = splitLine(line); /*Split the line into tokens*/
+		if (strcmp(tokens[0], "exit") == 0) /*Implement exit built-in*/
+			break;
+		if (tokens == NULL)
+		{
+			free(line);
+			continue;
+		}
 		/*handles execution */
 		execute_command(tokens);
 	}
