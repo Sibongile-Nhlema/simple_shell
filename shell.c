@@ -18,6 +18,7 @@ int main(void)
 		{
 			if (feof(stdin))
 			{
+				write(STDOUT_FILENO, "\n", 2);
 				break;
 			}
 			perror("Error: Failed to read command line.\n");
