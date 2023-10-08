@@ -8,13 +8,28 @@
  */
 char **splitLine(char *line)
 {
-	char *lineCopy, *token, **tokens;
+	char *lineCopy, *token, **tokens, *status;
 	int i;
 
 	lineCopy = myCustomStrdup(line);
 	token = strtok(line, DELIM);
 	if (myCustomStrcmp(token, "exit") == 0) /*Implement exit built-in*/
 	{
+		status = strtok(NULL, DELIM);
+		if (myCustomAtoi(status))
+		{
+			tokens = malloc(sizeof(char *) * 2);
+			if (tokens == NULL)
+			{
+				free(lineCopy);
+				perror("Error: Failed to allocate memory.\n");
+				return (NULL);
+			}
+			tokens[0] = myCustomStrdup(token);
+			tokens[1] = myCustomStrdup(status);
+			free(lineCopy);
+			return (tokens);
+		}
 		tokens = malloc(sizeof(char *));
 		if (tokens == NULL)
 		{
