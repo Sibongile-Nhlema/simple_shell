@@ -54,8 +54,10 @@ char *myCustomStrchr(char *string, char character)
 
 /**
  * myCustomStrcmp - The function compares 2 strings
+ *
  * @str1: A pointer to the first string
  * @str2: A pointer to the second string
+ *
  * Return: 0 if identical, nonzero if not
  */
 int myCustomStrcmp(char *str1, char *str2)
@@ -67,9 +69,9 @@ int myCustomStrcmp(char *str1, char *str2)
 		if (str1[j] != str2[j])
 			return (str1[j] - str2[j]);
 	}
-	if (sizeof(str1) > sizeof(str2))
+	if (myCustomStrlen(str1) > myCustomStrlen(str2))
 		return ((int)(str1[j]));
-	else if (sizeof(str1) < sizeof(str2))
+	else if (myCustomStrlen(str1) < myCustomStrlen(str2))
 		return ((int)(str2[j]));
 	else
 		return (0);
