@@ -8,23 +8,18 @@
 int main(void)
 {
 	char *line = NULL, **tokens = NULL, *prompt = "$ ";
+	int status;
 	size_t lineSize = 0;
 
 	while (1)
 	{
 		write(STDOUT_FILENO, prompt, 2);
-
 		if (getline(&line, &lineSize, stdin) == -1) /*Read a line from stdin*/
 		{
 			if (feof(stdin))
-			{
 				break;
-			}
-			else
-			{
-				perror("Error: Failed to read command line.\n");
-				exit(EXIT_FAILURE);
-			}
+			perror("Error: Failed to read command line.\n");
+			exit(EXIT_FAILURE);
 		}
 		freeTokens(tokens); /*Free previous allocation*/
 		tokens = splitLine(line); /*Split the line into tokens*/
@@ -32,7 +27,10 @@ int main(void)
 		{
 			if (tokens[1] != NULL && myCustomAtoi(tokens[1]))
 			{
-				exit(myCustomAtoi(tokens[1]));
+				status = myCustomAtoi(tokens[1]);
+				free(line);
+				freeTokens(tokens);
+				exit(status);
 			}
 			break;
 		}
@@ -41,7 +39,6 @@ int main(void)
 			free(line);
 			continue;
 		}
-		/*handles execution */
 		execute_command(tokens);
 	}
 	free(line);
