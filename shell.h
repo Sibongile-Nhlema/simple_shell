@@ -32,5 +32,6 @@ char *myCustomStrchr(char *string, char character);
 char *myCustomGetenv(char *varName);
 char *myCustomStrcpy(char *destination, char *source);
 char *myCustomStrcat(char *destination, char *source);
+int myCustomAtoi(char *string);
 
 #endif
