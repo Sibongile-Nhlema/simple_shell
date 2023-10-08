@@ -3,6 +3,17 @@
 int search_for_command(char **tokens);
 char *search_in_dir(char **tokens);
 char *exe_in_dir(char **tokens);
+void myCustomPrint(char* message);
+
+/**
+ * myCustomPrint - prints a string to stdout
+ * @message: string
+ */
+
+void myCustomPrint(char* message)
+{
+	write(1, message, myCustomStrlen(message));
+}
 
 /**
  * execute_command - executes command line agruments and handles path
@@ -36,7 +47,8 @@ void execute_command(char **tokens)
 	}
 	else
 	{
-		printf("%s command not found\n", tokens[0]);
+		myCustomPrint(tokens[0]);
+		myCustomPrint(": command not found\n");
 	}
 }
 
