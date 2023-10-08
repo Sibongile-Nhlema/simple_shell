@@ -16,8 +16,11 @@ void freeTokens(char **tokens)
 	{
 		if (myCustomStrcmp(tokens[i], "exit") == 0)
 		{
-			free(tokens[i]);
-			break;
+			if (tokens[i + 1] == NULL)
+			{
+				free(tokens[i]);
+				break;
+			}
 		}
 		free(tokens[i]);
 	}

@@ -15,7 +15,7 @@ char **implementExit(char *token, char *lineCopy)
 	status = strtok(NULL, DELIM);
 	if (status != NULL && myCustomAtoi(status))
 	{
-		tokens = malloc(sizeof(char *) * 2);
+		tokens = malloc(sizeof(char *) * 3);
 		if (tokens == NULL)
 		{
 			free(lineCopy);
@@ -24,10 +24,11 @@ char **implementExit(char *token, char *lineCopy)
 		}
 		tokens[0] = myCustomStrdup(token);
 		tokens[1] = myCustomStrdup(status);
+		tokens[2] = NULL;
 		free(lineCopy);
 		return (tokens);
 	}
-	tokens = malloc(sizeof(char *));
+	tokens = malloc(sizeof(char *) * 2);
 	if (tokens == NULL)
 	{
 		free(lineCopy);
@@ -35,6 +36,7 @@ char **implementExit(char *token, char *lineCopy)
 		return (NULL);
 	}
 	tokens[0] = myCustomStrdup(token);
+	tokens[1] = NULL;
 	free(lineCopy);
 	return (tokens);
 }
