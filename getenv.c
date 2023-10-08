@@ -1,7 +1,5 @@
 #include "shell.h"
 
-extern char **environ;
-
 /**
  * myCustomGetenv - Searches the environment list to find the var name
  *
@@ -11,17 +9,29 @@ extern char **environ;
  */
 char *myCustomGetenv(char *varName)
 {
-	char **environment = environ, *token;
+	int i, j, flag;
+	char *varValue;
 
-	while (*environment)
+	i = 0;
+	while (environ[i])
 	{
-		token = strtok(*environment, "=");
-		if (myCustomStrcmp(varName, token) == 0)
+		flag = 1;
+		j = 0;
+		while (environ[i][j] != '=') /*Check if what's before '=' equals varName*/
 		{
-			token = strtok(NULL, "=");
-			return (token);
+			if (environ[i][j] != varName[j])
+			{
+				flag = 0;
+				break;
+			}
+			j++;
 		}
-		environment++;
+		if (flag)
+		{
+			varValue = &environ[i][j + 1]; /*Skip over the '=' sign*/
+			return (varValue);
+		}
+		i++;
 	}
 
 	return (NULL);
