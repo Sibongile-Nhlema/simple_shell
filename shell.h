@@ -25,6 +25,7 @@ void execute_command(char **tokens);
 char **splitLine(char *line);
 void freeTokens(char **tokens);
 void search_and_execute_command(char **tokens);
+char **implementExit(char *token, char *lineCopy);
 int myCustomStrcmp(char *str1, char *str2);
 int myCustomStrlen(char *string);
 char *myCustomStrdup(char *string);
