@@ -21,7 +21,12 @@
 
 extern char **environ;
 
+/* execute_command.c functions*/
 void execute_command(char **tokens);
+int search_for_command(char **tokens);
+char *search_in_dir(char **tokens);
+char *exe_in_dir(char **tokens);
+
 char **splitLine(char *line);
 void freeTokens(char **tokens);
 void search_and_execute_command(char **tokens);
