@@ -17,7 +17,9 @@ int main(void)
 		if (getline(&line, &lineSize, stdin) == -1) /*Read a line from stdin*/
 		{
 			if (feof(stdin))
+			{
 				break;
+			}
 			perror("Error: Failed to read command line.\n");
 			exit(EXIT_FAILURE);
 		}

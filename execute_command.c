@@ -36,7 +36,7 @@ void execute_command(char **tokens)
 	}
 	else
 	{
-		printf("Error: '%s' command not found.\n", tokens[0]);
+		printf("%s command not found\n", tokens[0]);
 	}
 }
 
