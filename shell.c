@@ -30,7 +30,7 @@ int main(void)
 		tokens = splitLine(line); /*Split the line into tokens*/
 		if (myCustomStrcmp(tokens[0], "exit") == 0) /*Implement exit built-in*/
 		{
-			if (myCustomAtoi(tokens[1]))
+			if (tokens[1] != NULL && myCustomAtoi(tokens[1]))
 			{
 				exit(myCustomAtoi(tokens[1]));
 			}
