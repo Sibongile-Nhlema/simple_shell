@@ -37,8 +37,8 @@ void search_and_execute_command(char **tokens)
 {
 	char *path, *commandPath, *pathCopy, *token = NULL;
 
-
-	if (myCustomStrchr(tokens[0], '/') != NULL) /* Check if command contains a path*/
+	/* Check if command contains a path*/
+	if (myCustomStrchr(tokens[0], '/') != NULL)
 	{
 		if (execve(tokens[0], tokens, NULL) == -1)
 		{
@@ -63,7 +63,8 @@ void search_and_execute_command(char **tokens)
 			commandPath = malloc(myCustomStrlen(token) + myCustomStrlen(tokens[0]) + 2);
 			myCustomStrcpy(commandPath, token);
 			myCustomStrcat(commandPath, "/"); /* Append a slash to directory path */
-			myCustomStrcat(commandPath, tokens[0]);  /* Append command name to directory path */
+			/* Append command name to directory path */
+			myCustomStrcat(commandPath, tokens[0]);
 
 			if (commandPath == NULL)
 			{
