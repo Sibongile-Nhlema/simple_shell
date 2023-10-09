@@ -3,17 +3,6 @@
 int search_for_command(char **tokens);
 char *search_in_dir(char **tokens);
 char *exe_in_dir(char **tokens);
-void myCustomPrint(char* message);
-
-/**
- * myCustomPrint - prints a string to stdout
- * @message: string
- */
-
-void myCustomPrint(char* message)
-{
-	write(1, message, myCustomStrlen(message));
-}
 
 /**
  * execute_command - executes command line agruments and handles path
@@ -22,6 +11,8 @@ void myCustomPrint(char* message)
 
 void execute_command(char **tokens)
 {
+	int line_number = 0;
+
 	pid_t pid;
 
 	if (search_for_command(tokens) == 0)
@@ -37,6 +28,10 @@ void execute_command(char **tokens)
 		{
 			if ((execve(tokens[0], tokens, environ) == -1))
 			{
+				if (myCustomStrchr(tokens[0], '/') != NULL)
+				{
+					exit(2);
+				}
 				exe_in_dir(tokens);
 			}
 		}
@@ -47,8 +42,8 @@ void execute_command(char **tokens)
 	}
 	else
 	{
-		myCustomPrint(tokens[0]);
-		myCustomPrint(": command not found\n");
+		line_number++;
+		errMessage(tokens, line_number);
 	}
 }
 

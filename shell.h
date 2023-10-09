@@ -27,6 +27,13 @@ int search_for_command(char **tokens);
 char *search_in_dir(char **tokens);
 char *exe_in_dir(char **tokens);
 
+/* error message handling errPuts.c */
+void errMessage(char **tokens, int line_number);
+int errPutchar(char c);
+void errPuts(char *string);
+int printDecimal(int input, int fd);
+int ourPutChar(char c);
+
 char **splitLine(char *line);
 void freeTokens(char **tokens);
 void search_and_execute_command(char **tokens);
