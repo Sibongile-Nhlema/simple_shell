@@ -7,13 +7,16 @@
  */
 int main(void)
 {
-	char *line = NULL, **tokens = NULL, *prompt = "$ ";
+	char *line = NULL, **tokens = NULL;
 	int status;
 	size_t lineSize = 0;
 
 	while (1)
 	{
-		write(STDOUT_FILENO, prompt, 2);
+		if (isatty(STDIN_FILENO))
+		{
+			write(STDOUT_FILENO, "$ ", 2);
+		}
 		if (getline(&line, &lineSize, stdin) == -1) /*Read a line from stdin*/
 		{
 			if (feof(stdin))
