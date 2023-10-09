@@ -34,6 +34,9 @@ void execute_command(char **tokens)
 				}
 				exe_in_dir(tokens);
 			}
+			{
+				exit(127);
+			}
 		}
 		else
 		{

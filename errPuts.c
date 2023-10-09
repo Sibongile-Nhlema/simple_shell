@@ -53,7 +53,7 @@ void errMessage(char **tokens, int line_number)
 {
 
 	errPuts(tokens[0]);
-	errPuts(" ");
+	errPuts(": ");
 	printDecimal(line_number, STDERR_FILENO);
 	errPuts(": ");
 	errPuts(tokens[0]);
