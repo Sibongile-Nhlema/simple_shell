@@ -52,7 +52,7 @@ int errPutchar(char c)
 void errMessage(char **tokens, int line_number)
 {
 
-	errPuts(tokens[0]);
+	errPuts("./hsh");
 	errPuts(": ");
 	printDecimal(line_number, STDERR_FILENO);
 	errPuts(": ");

@@ -88,6 +88,7 @@ int search_for_command(char **tokens)
 char *search_in_dir(char **tokens)
 {
 	char *path, *commandPath, *pathCopy, *token = NULL;
+	int line_number = 0;
 
 	path = myCustomGetenv("PATH");
 	pathCopy = myCustomStrdup(path);
@@ -95,8 +96,9 @@ char *search_in_dir(char **tokens)
 
 	if (pathCopy == NULL)
 	{
-		perror("Error: Failed to allocate memory for pathCopy.\n");
-		exit(EXIT_FAILURE);
+		line_number++;
+		errMessage(tokens, line_number);
+		exit(127);
 	}
 	while (token != NULL)
 	{
@@ -108,9 +110,10 @@ char *search_in_dir(char **tokens)
 
 		if (commandPath == NULL)
 		{
-			perror("Error: Failed to allocate memory for commandPath.\n");
+			line_number++;
+			errMessage(tokens, line_number);
 			free(pathCopy);
-			exit(EXIT_FAILURE);
+			exit(127);
 		}
 		if (access(commandPath, X_OK) == 0)
 		{
