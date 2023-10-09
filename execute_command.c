@@ -61,14 +61,19 @@ void execute_command(char **tokens)
 
 int search_for_command(char **tokens)
 {
+	char *commandPath;
 	if (myCustomStrchr(tokens[0], '/') != NULL) /* Check if cmd has path*/
 	{
 		return (0);
 	}
 	else
 	{
-		if (search_in_dir(tokens) != NULL)
+		commandPath = search_in_dir(tokens);
+		if (commandPath != NULL)
+		{
+			free(commandPath);
 			return (0);
+		}
 		else
 			return (1);
 	}
@@ -106,10 +111,12 @@ char *search_in_dir(char **tokens)
 		if (commandPath == NULL)
 		{
 			perror("Error: Failed to allocate memory for commandPath.\n");
+			free(pathCopy);
 			exit(EXIT_FAILURE);
 		}
 		if (access(commandPath, X_OK) == 0)
 		{
+			free(pathCopy);
 			return (commandPath);
 		}
 		free(commandPath);
