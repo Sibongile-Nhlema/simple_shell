@@ -13,7 +13,10 @@ void execute_command(char **tokens)
 {
 	int line_number = 0;
 
+	char *commandPath;
+
 	pid_t pid;
+
 
 	if (search_for_command(tokens) == 0)
 	{
@@ -32,8 +35,10 @@ void execute_command(char **tokens)
 				{
 					exit(2);
 				}
-				exe_in_dir(tokens);
+				commandPath = exe_in_dir(tokens);
+				free(commandPath);
 			}
+			else
 			{
 				exit(127);
 			}
@@ -45,8 +50,10 @@ void execute_command(char **tokens)
 	}
 	else
 	{
+
 		line_number++;
 		errMessage(tokens, line_number);
+		exit(127);
 	}
 }
 
@@ -62,6 +69,7 @@ int search_for_command(char **tokens)
 	char *commandPath;
 	if (myCustomStrchr(tokens[0], '/') != NULL) /* Check if cmd has path*/
 	{
+		
 		return (0);
 	}
 	else
@@ -73,7 +81,9 @@ int search_for_command(char **tokens)
 			return (0);
 		}
 		else
+		{
 			return (1);
+		}
 	}
 	return (0);
 }
@@ -92,29 +102,29 @@ char *search_in_dir(char **tokens)
 
 	path = myCustomGetenv("PATH");
 	pathCopy = myCustomStrdup(path);
-	token = strtok(pathCopy, ":");
 
 	if (pathCopy == NULL)
 	{
 		line_number++;
 		errMessage(tokens, line_number);
-		exit(127);
+		exit(0);
 	}
+
+	token = strtok(pathCopy, ":");
+
 	while (token != NULL)
 	{
 		commandPath = malloc(myCustomStrlen(token)
 				+ myCustomStrlen(tokens[0]) + 2);
-		myCustomStrcpy(commandPath, token);
-		myCustomStrcat(commandPath, "/"); /* Append a slash to directory path */
-		myCustomStrcat(commandPath, tokens[0]); /* Append command name to dir path */
-
 		if (commandPath == NULL)
 		{
 			line_number++;
 			errMessage(tokens, line_number);
-			free(pathCopy);
 			exit(127);
 		}
+		myCustomStrcpy(commandPath, token);
+		myCustomStrcat(commandPath, "/"); /* Append a slash to directory path */
+		myCustomStrcat(commandPath, tokens[0]); /* Append command name to dir path */
 		if (access(commandPath, X_OK) == 0)
 		{
 			free(pathCopy);
@@ -137,35 +147,41 @@ char *search_in_dir(char **tokens)
 char *exe_in_dir(char **tokens)
 {
 	char *path, *commandPath, *pathCopy, *token = NULL;
+	int line_number = 0;
 
 	path = myCustomGetenv("PATH");
 	pathCopy = myCustomStrdup(path);
-	token = strtok(pathCopy, ":");
 
 	if (pathCopy == NULL)
 	{
 		perror("Error: Failed to allocate memory for pathCopy.\n");
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
+	token = strtok(pathCopy, ":");
 	while (token != NULL)
 	{
 		commandPath = malloc(myCustomStrlen(token)
 				+ myCustomStrlen(tokens[0]) + 2);
-		myCustomStrcpy(commandPath, token);
-		myCustomStrcat(commandPath, "/");
-		myCustomStrcat(commandPath, tokens[0]);
 
 		if (commandPath == NULL)
 		{
 			perror("Error: Failed to allocate memory for commandPath.\n");
-			exit(EXIT_FAILURE);
+			free(pathCopy);
+			exit(127);
 		}
+		myCustomStrcpy(commandPath, token);
+		myCustomStrcat(commandPath, "/");
+		myCustomStrcat(commandPath, tokens[0]);
+
 		if (access(commandPath, X_OK) == 0)
 		{
 			if ((execve(commandPath, tokens, environ) == -1))
 			{
-				perror("Error: No such file or directory.\n");
-				exit(EXIT_FAILURE);
+				line_number++;
+				errMessage(tokens, line_number);
+				free(commandPath);
+				free(pathCopy);
+				exit(127);
 			}
 		}
 		free(commandPath);
