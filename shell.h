@@ -44,5 +44,9 @@ int myCustomIsSpace(int character);
 int checkEmptyInput(char *line);
 void negativeExitError(char *exe, char *status);
 void stringExitError(char *exe, char *string);
+char **positiveStatusHandler(char *status, char *lineCopy, char *token);
+char **negativeStatusHandler(char *status, char *lineCopy, char *token);
+char **stringStatusHandler(char *status, char *lineCopy, char *token);
+int findExitStatus(char **tokens, char *line, char **argv);
 
 #endif

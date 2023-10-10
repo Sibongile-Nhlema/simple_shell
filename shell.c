@@ -37,26 +37,11 @@ int main(int argc, char **argv)
 		tokens = splitLine(line); /*Split the line into tokens*/
 		if (myCustomStrcmp(tokens[0], "exit") == 0) /*Implement exit built-in*/
 		{
-			if (tokens[1] != NULL && myCustomAtoi(tokens[1]) > 0)
+			if (tokens[1] != NULL && (myCustomAtoi(tokens[1]) > 0 ||
+						myCustomAtoi(tokens[1]) < 0 || myCustomAtoi(tokens[1]) == 0))
 			{
-				status = myCustomAtoi(tokens[1]);
-				free(line);
-				freeTokens(tokens);
+				status = findExitStatus(tokens, line, argv);
 				exit(status);
-			}
-			if (tokens[1] != NULL && myCustomAtoi(tokens[1]) < 0)
-			{
-				free(line);
-				negativeExitError(argv[0], tokens[1]);
-				freeTokens(tokens);
-				exit(2);
-			}
-			if (tokens[1] != NULL && myCustomAtoi(tokens[1]) == 0)
-			{
-				free(line);
-				stringExitError(argv[0], tokens[1]);
-				freeTokens(tokens);
-				exit(2);
 			}
 			break;
 		}
@@ -67,13 +52,8 @@ int main(int argc, char **argv)
 		}
 		status = execute_command(tokens);
 		if (status)
-		{
-			free(line);
-			freeTokens(tokens);
-			exit(status);
-		}
+			free(line), freeTokens(tokens), exit(status);
 	}
-	free(line);
-	freeTokens(tokens);
+	free(line), freeTokens(tokens);
 	return (0);
 }
