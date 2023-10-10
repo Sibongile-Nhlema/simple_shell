@@ -107,7 +107,7 @@ char *search_in_dir(char **tokens)
 	{
 		line_number++;
 		errMessage(tokens, line_number);
-		exit(0);
+		exit(127);
 	}
 
 	token = strtok(pathCopy, ":");
