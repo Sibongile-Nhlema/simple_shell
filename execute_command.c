@@ -1,8 +1,8 @@
 #include "shell.h"
 
-int search_for_command(char **tokens);
-char *search_in_dir(char **tokens);
-char *exe_in_dir(char **tokens);
+int search_for_command(char **tokens, char *line);
+char *search_in_dir(char **tokens, char *line);
+char *exe_in_dir(char **tokens, char *line);
 
 /**
  * execute_command - executes command line agruments and handles path
@@ -19,7 +19,7 @@ int execute_command(char **tokens, char *line)
 
 	pid_t pid;
 
-	if (search_for_command(tokens) == 0)
+	if (search_for_command(tokens, line) == 0)
 	{
 		pid = fork();
 
@@ -27,7 +27,7 @@ int execute_command(char **tokens, char *line)
 		{
 			perror("Error: Failed to fork the current process.\n");
 			free(line);
-			free(tokens);
+			freeTokens(tokens);
 			exit(EXIT_FAILURE);
 		}
 		if (pid == 0)
@@ -37,16 +37,16 @@ int execute_command(char **tokens, char *line)
 				if (myCustomStrchr(tokens[0], '/') != NULL)
 				{
 					free(line);
-					free(tokens);
+					freeTokens(tokens);
 					exit(127);
 				}
-				commandPath = exe_in_dir(tokens);
+				commandPath = exe_in_dir(tokens, line);
 				free(commandPath);
 			}
 			else
 			{
 				free(line);
-				free(tokens);
+				freeTokens(tokens);
 				exit(127);
 			}
 		}
@@ -79,7 +79,7 @@ int execute_command(char **tokens, char *line)
  * Return: 1 on error, 0 on success
  */
 
-int search_for_command(char **tokens)
+int search_for_command(char **tokens, char *line)
 {
 	char *commandPath;
 
@@ -90,7 +90,7 @@ int search_for_command(char **tokens)
 	}
 	else
 	{
-		commandPath = search_in_dir(tokens);
+		commandPath = search_in_dir(tokens, line);
 		if (commandPath != NULL)
 		{
 			free(commandPath);
@@ -98,6 +98,7 @@ int search_for_command(char **tokens)
 		}
 		else
 		{
+			free(commandPath);
 			return (1);
 		}
 	}
@@ -111,7 +112,7 @@ int search_for_command(char **tokens)
  * Return: Null if not found, commandPath if found in dir
  */
 
-char *search_in_dir(char **tokens)
+char *search_in_dir(char **tokens, char *line)
 {
 	char *path, *commandPath, *pathCopy, *token = NULL;
 	int line_number = 0;
@@ -123,6 +124,8 @@ char *search_in_dir(char **tokens)
 	{
 		line_number++;
 		errMessage(tokens, line_number);
+		free(line);
+		freeTokens(tokens);
 		exit(127);
 	}
 
@@ -137,6 +140,8 @@ char *search_in_dir(char **tokens)
 			line_number++;
 			errMessage(tokens, line_number);
 			free(pathCopy);
+			free(line);
+			freeTokens(tokens);
 			exit(127);
 		}
 		myCustomStrcpy(commandPath, token);
@@ -161,7 +166,7 @@ char *search_in_dir(char **tokens)
  * Return: Null on success, nothing on error
  */
 
-char *exe_in_dir(char **tokens)
+char *exe_in_dir(char **tokens, char *line)
 {
 	char *path, *commandPath, *pathCopy, *token = NULL;
 	int line_number = 0;
@@ -172,6 +177,8 @@ char *exe_in_dir(char **tokens)
 	if (pathCopy == NULL)
 	{
 		perror("Error: Failed to allocate memory for pathCopy.\n");
+		free(line);
+		freeTokens(tokens);
 		exit(127);
 	}
 	token = strtok(pathCopy, ":");
@@ -184,6 +191,8 @@ char *exe_in_dir(char **tokens)
 		{
 			perror("Error: Failed to allocate memory for commandPath.\n");
 			free(pathCopy);
+			free(line);
+			freeTokens(tokens);
 			exit(127);
 		}
 		myCustomStrcpy(commandPath, token);
@@ -198,6 +207,8 @@ char *exe_in_dir(char **tokens)
 				errMessage(tokens, line_number);
 				free(commandPath);
 				free(pathCopy);
+				free(line);
+				freeTokens(tokens);
 				exit(127);
 			}
 		}
