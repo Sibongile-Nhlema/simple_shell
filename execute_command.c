@@ -7,7 +7,7 @@ void remove_quotes(char *command);
 /**
  * execute_command - executes command line agruments and handles path
  * @tokens: command and arguments
- *
+ * @line: line read
  * Return: 0 on success, 2 on failure
  */
 
@@ -75,7 +75,7 @@ int execute_command(char **tokens, char *line)
 /**
  * search_for_command - finds command in current directory
  * @tokens: command and arguments
- *
+ * @line: line read
  * Return: 1 on error, 0 on success
  */
 
@@ -83,14 +83,14 @@ int search_for_command(char **tokens, char *line)
 {
 	char *commandPath;
 
+	if (tokens[0][0] == '\"' && tokens[0][myCustomStrlen(tokens[0]) - 1] == '\"')
+		remove_quotes(tokens[0]);
 	if (myCustomStrchr(tokens[0], '/') != NULL) /* Check if cmd has path*/
 	{
 		return (0);
 	}
 	else
 	{
-		if (tokens[0][0] == '\"' && tokens[0][strlen(tokens[0]) - 1] == '\"')
-			remove_quotes(tokens[0]);
 		commandPath = search_in_dir(tokens, line);
 		if (commandPath != NULL)
 		{
@@ -109,7 +109,7 @@ int search_for_command(char **tokens, char *line)
 /**
  * search_in_dir - searches in directories for full path
  * @tokens: command and arguments entered by user
- *
+ * @line: line read
  * Return: Null if not found, commandPath if found in dir
  */
 
@@ -163,7 +163,7 @@ char *search_in_dir(char **tokens, char *line)
 /**
  * exe_in_dir - executes command found in path
  * @tokens: command and argument
- *
+ * @line: line read
  * Return: Null on success, nothing on error
  */
 
@@ -228,7 +228,7 @@ char *exe_in_dir(char **tokens, char *line)
 void remove_quotes(char *command)
 {
 	int i, j;
-	int len = strlen(command);
+	int len = myCustomStrlen(command);
 
 	for (i = 0, j = 0; i < len; i++)
 	{

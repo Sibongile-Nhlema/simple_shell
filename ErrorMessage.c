@@ -44,8 +44,9 @@ int errPutchar(char c)
 
 /**
  * errMessage - prints error message
- * @info: the parameter & return info struct
- * @estr: string containing specified error type
+ * @tokens: command or agruments
+ * @line_number: line count
+ *
  * Return: 0 if no numbers in string, converted number otherwise
  */
 
@@ -64,7 +65,7 @@ void errMessage(char **tokens, int line_number)
 
 /**
  * printDecimal - prints decimal number of base 10
- * @input
+ * @input: line number
  * @fd: file descriptor
  *
  * Return: number of chars printed
@@ -89,10 +90,10 @@ int printDecimal(int input, int fd)
 	curr = abso;
 	for (i = 1000000000; i > 1; i /= 10)
 	{
-		if (abso/ i)
+		if (abso / i)
 		{
-			 shell_putchar('0' + curr / i);
-			 counter++;
+			shell_putchar('0' + curr / i);
+			counter++;
 		}
 		curr %= i;
 	}
