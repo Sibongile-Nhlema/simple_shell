@@ -59,6 +59,7 @@ int execute_command(char **tokens)
 
 		line_number++;
 		errMessage(tokens, line_number);
+		freeTokens(tokens);
 		exit(127);
 	}
 	return (0);
