@@ -3,12 +3,12 @@
 int search_for_command(char **tokens, char *line);
 char *search_in_dir(char **tokens, char *line);
 char *exe_in_dir(char **tokens, char *line);
-void remove_quotes(char *command);
+char *remove_quotes(char *command);
 /**
  * execute_command - executes command line agruments and handles path
  * @tokens: command and arguments
  * @line: line read
- * Return: 0 on success, 2 on failure
+ * Return: 0 on success, else returns commandPath
  */
 
 int execute_command(char **tokens, char *line)
@@ -19,6 +19,10 @@ int execute_command(char **tokens, char *line)
 
 	pid_t pid;
 
+	if (tokens[0][0] == '\"' && tokens[0][myCustomStrlen(tokens[0]) - 1] == '\"')
+	{
+		tokens[0] = remove_quotes(tokens[0]);
+	}
 	if (search_for_command(tokens, line) == 0)
 	{
 		pid = fork();
@@ -83,8 +87,6 @@ int search_for_command(char **tokens, char *line)
 {
 	char *commandPath;
 
-	if (tokens[0][0] == '\"' && tokens[0][myCustomStrlen(tokens[0]) - 1] == '\"')
-		remove_quotes(tokens[0]);
 	if (myCustomStrchr(tokens[0], '/') != NULL) /* Check if cmd has path*/
 	{
 		return (0);
@@ -223,9 +225,11 @@ char *exe_in_dir(char **tokens, char *line)
 /**
  * remove_quotes - removes quotes so that a command can be executed
  * @command: command
+ *
+ * Return: command without quotes
  */
 
-void remove_quotes(char *command)
+char *remove_quotes(char *command)
 {
 	int i, j;
 	int len = myCustomStrlen(command);
@@ -236,4 +240,6 @@ void remove_quotes(char *command)
 			command[j++] = command[i];
 	}
 	command[j] = '\0';
+
+	return(command);
 }
