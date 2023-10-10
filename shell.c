@@ -3,14 +3,18 @@
 /**
  * main - Acts as a command line interpreter
  *
+ * @argc: Argument count
+ * @argv: An array of command line arguments
+ *
  * Return: 0
  */
-int main(void)
+int main(int argc, char **argv)
 {
 	char *line = NULL, *lineCopy = NULL, **tokens = NULL;
 	int status;
 	size_t lineSize = 0;
 
+	UNUSED(argc);
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
@@ -33,12 +37,26 @@ int main(void)
 		tokens = splitLine(line); /*Split the line into tokens*/
 		if (myCustomStrcmp(tokens[0], "exit") == 0) /*Implement exit built-in*/
 		{
-			if (tokens[1] != NULL && myCustomAtoi(tokens[1]))
+			if (tokens[1] != NULL && myCustomAtoi(tokens[1]) > 0)
 			{
 				status = myCustomAtoi(tokens[1]);
 				free(line);
 				freeTokens(tokens);
 				exit(status);
+			}
+			if (tokens[1] != NULL && myCustomAtoi(tokens[1]) < 0)
+			{
+				free(line);
+				negativeExitError(argv[0], tokens[1]);
+				freeTokens(tokens);
+				exit(2);
+			}
+			if (tokens[1] != NULL && myCustomAtoi(tokens[1]) == 0)
+			{
+				free(line);
+				stringExitError(argv[0], tokens[1]);
+				freeTokens(tokens);
+				exit(2);
 			}
 			break;
 		}
@@ -47,7 +65,13 @@ int main(void)
 			free(line);
 			continue;
 		}
-		execute_command(tokens);
+		status = execute_command(tokens);
+		if (status)
+		{
+			free(line);
+			freeTokens(tokens);
+			exit(status);
+		}
 	}
 	free(line);
 	freeTokens(tokens);

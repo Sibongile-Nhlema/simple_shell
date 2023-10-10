@@ -7,16 +7,17 @@ char *exe_in_dir(char **tokens);
 /**
  * execute_command - executes command line agruments and handles path
  * @tokens: command and arguments
+ *
+ * Return: 0 on success, 2 on failure
  */
 
-void execute_command(char **tokens)
+int execute_command(char **tokens)
 {
 	int line_number = 0;
-
+	int status, childExitStatus;
 	char *commandPath;
 
 	pid_t pid;
-
 
 	if (search_for_command(tokens) == 0)
 	{
@@ -33,7 +34,7 @@ void execute_command(char **tokens)
 			{
 				if (myCustomStrchr(tokens[0], '/') != NULL)
 				{
-					exit(2);
+					exit(127);
 				}
 				commandPath = exe_in_dir(tokens);
 				free(commandPath);
@@ -45,7 +46,12 @@ void execute_command(char **tokens)
 		}
 		else
 		{
-			wait(NULL);
+			wait(&status);
+			if (WIFEXITED(status))
+			{
+				childExitStatus = WEXITSTATUS(status);
+				return (childExitStatus);
+			}
 		}
 	}
 	else
@@ -55,6 +61,7 @@ void execute_command(char **tokens)
 		errMessage(tokens, line_number);
 		exit(127);
 	}
+	return (0);
 }
 
 /**
@@ -67,6 +74,7 @@ void execute_command(char **tokens)
 int search_for_command(char **tokens)
 {
 	char *commandPath;
+
 	if (myCustomStrchr(tokens[0], '/') != NULL) /* Check if cmd has path*/
 	{
 		
