@@ -128,6 +128,7 @@ char *search_in_dir(char **tokens)
 		{
 			line_number++;
 			errMessage(tokens, line_number);
+			free(pathCopy);
 			exit(127);
 		}
 		myCustomStrcpy(commandPath, token);
