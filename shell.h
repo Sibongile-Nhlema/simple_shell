@@ -17,12 +17,13 @@
 /* error handling */
 #include <errno.h>
 
-#define DELIM " \n\t"
+#define DELIM " \n\t\r\a"
+#define UNUSED(x) (void)(x)
 
 extern char **environ;
 
 /* execute_command.c functions*/
-void execute_command(char **tokens);
+int execute_command(char **tokens);
 int search_for_command(char **tokens);
 char *search_in_dir(char **tokens);
 char *exe_in_dir(char **tokens);
@@ -41,5 +42,7 @@ char *myCustomStrcat(char *destination, char *source);
 int myCustomAtoi(char *string);
 int myCustomIsSpace(int character);
 int checkEmptyInput(char *line);
+void negativeExitError(char *exe, char *status);
+void stringExitError(char *exe, char *string);
 
 #endif

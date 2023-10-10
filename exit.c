@@ -13,7 +13,37 @@ char **implementExit(char *token, char *lineCopy)
 	char *status, **tokens;
 
 	status = strtok(NULL, DELIM);
-	if (status != NULL && myCustomAtoi(status))
+	if (status != NULL && myCustomAtoi(status) > 0)
+	{
+		tokens = malloc(sizeof(char *) * 3);
+		if (tokens == NULL)
+		{
+			free(lineCopy);
+			perror("Error: Failed to allocate memory.\n");
+			return (NULL);
+		}
+		tokens[0] = myCustomStrdup(token);
+		tokens[1] = myCustomStrdup(status);
+		tokens[2] = NULL;
+		free(lineCopy);
+		return (tokens);
+	}
+	if (status != NULL && myCustomAtoi(status) < 0)
+	{
+		tokens = malloc(sizeof(char *) * 3);
+		if (tokens == NULL)
+		{
+			free(lineCopy);
+			perror("Error: Failed to allocate memory.\n");
+			return (NULL);
+		}
+		tokens[0] = myCustomStrdup(token);
+		tokens[1] = myCustomStrdup(status);
+		tokens[2] = NULL;
+		free(lineCopy);
+		return (tokens);
+	}
+	if (status != NULL && myCustomAtoi(status) == 0)
 	{
 		tokens = malloc(sizeof(char *) * 3);
 		if (tokens == NULL)

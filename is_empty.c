@@ -15,18 +15,20 @@ int checkEmptyInput(char *line)
 	{
 		return (1);
 	}
-
-	while (myCustomIsSpace((unsigned char)line[0])) /*Skip over leading whitespaces*/
+	/*Skip over leading whitespaces*/
+	while (myCustomIsSpace((unsigned char)line[0]))
 	{
 		line++;
 	}
-	if (line[0] == '\0') /*Check if line is empty*/
+	/*Check if line is empty*/
+	if (line[0] == '\0')
 	{
 		return (1);
 	}
 
 	length = myCustomStrlen(line);
-	for (i = length - 1; i >= 0 && myCustomIsSpace((unsigned char)line[i]); i--) /*Remove trailing whitespaces*/
+	/*Remove trailing whitespaces*/
+	for (i = length - 1; i >= 0 && myCustomIsSpace((unsigned char)line[i]); i--)
 	{
 		line[i] = '\0';
 	}

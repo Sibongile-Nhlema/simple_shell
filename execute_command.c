@@ -3,14 +3,14 @@
 int search_for_command(char **tokens);
 char *search_in_dir(char **tokens);
 char *exe_in_dir(char **tokens);
-void myCustomPrint(char* message);
+void myCustomPrint(char *message);
 
 /**
  * myCustomPrint - prints a string to stdout
  * @message: string
  */
 
-void myCustomPrint(char* message)
+void myCustomPrint(char *message)
 {
 	write(1, message, myCustomStrlen(message));
 }
@@ -18,11 +18,14 @@ void myCustomPrint(char* message)
 /**
  * execute_command - executes command line agruments and handles path
  * @tokens: command and arguments
+ *
+ * Return: 0 on success, 2 on failure
  */
 
-void execute_command(char **tokens)
+int execute_command(char **tokens)
 {
 	pid_t pid;
+	int status, childExitStatus;
 
 	if (search_for_command(tokens) == 0)
 	{
@@ -37,12 +40,21 @@ void execute_command(char **tokens)
 		{
 			if ((execve(tokens[0], tokens, environ) == -1))
 			{
+				if (myCustomStrchr(tokens[0], '/') != NULL)
+				{
+					exit(2);
+				}
 				exe_in_dir(tokens);
 			}
 		}
 		else
 		{
-			wait(NULL);
+			wait(&status);
+			if (WIFEXITED(status))
+			{
+				childExitStatus = WEXITSTATUS(status);
+				return (childExitStatus);
+			}
 		}
 	}
 	else
@@ -50,6 +62,7 @@ void execute_command(char **tokens)
 		myCustomPrint(tokens[0]);
 		myCustomPrint(": command not found\n");
 	}
+	return (0);
 }
 
 /**
@@ -62,6 +75,7 @@ void execute_command(char **tokens)
 int search_for_command(char **tokens)
 {
 	char *commandPath;
+
 	if (myCustomStrchr(tokens[0], '/') != NULL) /* Check if cmd has path*/
 	{
 		return (0);
