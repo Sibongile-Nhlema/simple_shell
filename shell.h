@@ -23,7 +23,7 @@
 extern char **environ;
 
 /* execute_command.c functions*/
-int execute_command(char **tokens);
+int execute_command(char **tokens, char *line);
 int search_for_command(char **tokens);
 char *search_in_dir(char **tokens);
 char *exe_in_dir(char **tokens);

@@ -11,7 +11,7 @@ char *exe_in_dir(char **tokens);
  * Return: 0 on success, 2 on failure
  */
 
-int execute_command(char **tokens)
+int execute_command(char **tokens, char *line)
 {
 	int line_number = 0;
 	int status, childExitStatus;
@@ -26,6 +26,8 @@ int execute_command(char **tokens)
 		if ((pid) == -1)
 		{
 			perror("Error: Failed to fork the current process.\n");
+			free(line);
+			free(tokens);
 			exit(EXIT_FAILURE);
 		}
 		if (pid == 0)
@@ -34,6 +36,8 @@ int execute_command(char **tokens)
 			{
 				if (myCustomStrchr(tokens[0], '/') != NULL)
 				{
+					free(line);
+					free(tokens);
 					exit(127);
 				}
 				commandPath = exe_in_dir(tokens);
@@ -41,6 +45,8 @@ int execute_command(char **tokens)
 			}
 			else
 			{
+				free(line);
+				free(tokens);
 				exit(127);
 			}
 		}
@@ -59,6 +65,7 @@ int execute_command(char **tokens)
 
 		line_number++;
 		errMessage(tokens, line_number);
+		free(line);
 		freeTokens(tokens);
 		exit(127);
 	}

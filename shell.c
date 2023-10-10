@@ -35,26 +35,25 @@ int main(int argc, char **argv)
 		free(lineCopy);
 		freeTokens(tokens); /*Free previous allocation*/
 		tokens = splitLine(line); /*Split the line into tokens*/
-		free(line);
 		if (myCustomStrcmp(tokens[0], "exit") == 0) /*Implement exit built-in*/
 		{
 			if (tokens[1] != NULL && myCustomAtoi(tokens[1]) > 0)
 			{
 				status = myCustomAtoi(tokens[1]);
-				/* free(line); */
+				free(line);
 				freeTokens(tokens);
 				exit(status);
 			}
 			if (tokens[1] != NULL && myCustomAtoi(tokens[1]) < 0)
 			{
-				/* free(line); */
+				free(line);
 				negativeExitError(argv[0], tokens[1]);
 				freeTokens(tokens);
 				exit(2);
 			}
 			if (tokens[1] != NULL && myCustomAtoi(tokens[1]) == 0)
 			{
-				/* free(line); */
+				free(line);
 				stringExitError(argv[0], tokens[1]);
 				freeTokens(tokens);
 				exit(2);
@@ -63,13 +62,13 @@ int main(int argc, char **argv)
 		}
 		if (tokens == NULL)
 		{
-			/* free(line); */
+			free(line);
 			continue;
 		}
-		status = execute_command(tokens);
+		status = execute_command(tokens, line);
 		if (status)
 		{
-			/* free(line); */
+			free(line);
 			freeTokens(tokens);
 			exit(status);
 		}
