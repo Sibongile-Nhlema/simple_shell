@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 			free(line);
 			continue;
 		}
-		status = execute_command(tokens);
+		status = execute_command(tokens, line);
 		if (status)
 			free(line), freeTokens(tokens), exit(status);
 	}

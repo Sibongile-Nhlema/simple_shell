@@ -23,10 +23,17 @@
 extern char **environ;
 
 /* execute_command.c functions*/
-int execute_command(char **tokens);
-int search_for_command(char **tokens);
-char *search_in_dir(char **tokens);
-char *exe_in_dir(char **tokens);
+int execute_command(char **tokens, char *line);
+int search_for_command(char **tokens, char *line);
+char *search_in_dir(char **tokens, char *line);
+char *exe_in_dir(char **tokens, char *line);
+
+/* error message handling errPuts.c */
+void errMessage(char **tokens, int line_number);
+int errPutchar(char c);
+void errPuts(char *string);
+int printDecimal(int input, int fd);
+int ourPutChar(char c);
 
 char **splitLine(char *line);
 void freeTokens(char **tokens);

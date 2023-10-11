@@ -1,50 +1,57 @@
 #include "shell.h"
 
-int search_for_command(char **tokens);
-char *search_in_dir(char **tokens);
-char *exe_in_dir(char **tokens);
-void myCustomPrint(char *message);
-
-/**
- * myCustomPrint - prints a string to stdout
- * @message: string
- */
-
-void myCustomPrint(char *message)
-{
-	write(1, message, myCustomStrlen(message));
-}
-
+int search_for_command(char **tokens, char *line);
+char *search_in_dir(char **tokens, char *line);
+char *exe_in_dir(char **tokens, char *line);
+char *remove_quotes(char *command);
 /**
  * execute_command - executes command line agruments and handles path
  * @tokens: command and arguments
- *
- * Return: 0 on success, 2 on failure
+ * @line: line read
+ * Return: 0 on success, else returns commandPath
  */
 
-int execute_command(char **tokens)
+int execute_command(char **tokens, char *line)
 {
-	pid_t pid;
+	int line_number = 0;
 	int status, childExitStatus;
+	char *commandPath;
 
-	if (search_for_command(tokens) == 0)
+	pid_t pid;
+
+	if (tokens[0][0] == '\"' && tokens[0][myCustomStrlen(tokens[0]) - 1] == '\"')
+	{
+		tokens[0] = remove_quotes(tokens[0]);
+	}
+	if (search_for_command(tokens, line) == 0)
 	{
 		pid = fork();
 
 		if ((pid) == -1)
 		{
 			perror("Error: Failed to fork the current process.\n");
+			free(line);
+			freeTokens(tokens);
 			exit(EXIT_FAILURE);
 		}
 		if (pid == 0)
 		{
-			if ((execve(tokens[0], tokens, environ) == -1))
+			if ((execve(tokens[0], tokens, NULL) == -1))
 			{
 				if (myCustomStrchr(tokens[0], '/') != NULL)
 				{
-					exit(2);
+					free(line);
+					freeTokens(tokens);
+					exit(127);
 				}
-				exe_in_dir(tokens);
+				commandPath = exe_in_dir(tokens, line);
+				free(commandPath);
+			}
+			else
+			{
+				free(line);
+				freeTokens(tokens);
+				exit(127);
 			}
 		}
 		else
@@ -59,8 +66,12 @@ int execute_command(char **tokens)
 	}
 	else
 	{
-		myCustomPrint(tokens[0]);
-		myCustomPrint(": command not found\n");
+
+		line_number++;
+		errMessage(tokens, line_number);
+		free(line);
+		freeTokens(tokens);
+		exit(127);
 	}
 	return (0);
 }
@@ -68,11 +79,11 @@ int execute_command(char **tokens)
 /**
  * search_for_command - finds command in current directory
  * @tokens: command and arguments
- *
+ * @line: line read
  * Return: 1 on error, 0 on success
  */
 
-int search_for_command(char **tokens)
+int search_for_command(char **tokens, char *line)
 {
 	char *commandPath;
 
@@ -82,14 +93,17 @@ int search_for_command(char **tokens)
 	}
 	else
 	{
-		commandPath = search_in_dir(tokens);
+		commandPath = search_in_dir(tokens, line);
 		if (commandPath != NULL)
 		{
 			free(commandPath);
 			return (0);
 		}
 		else
+		{
+			free(commandPath);
 			return (1);
+		}
 	}
 	return (0);
 }
@@ -97,37 +111,45 @@ int search_for_command(char **tokens)
 /**
  * search_in_dir - searches in directories for full path
  * @tokens: command and arguments entered by user
- *
+ * @line: line read
  * Return: Null if not found, commandPath if found in dir
  */
 
-char *search_in_dir(char **tokens)
+char *search_in_dir(char **tokens, char *line)
 {
 	char *path, *commandPath, *pathCopy, *token = NULL;
+	int line_number = 0;
 
 	path = myCustomGetenv("PATH");
 	pathCopy = myCustomStrdup(path);
-	token = strtok(pathCopy, ":");
 
 	if (pathCopy == NULL)
 	{
-		perror("Error: Failed to allocate memory for pathCopy.\n");
-		exit(EXIT_FAILURE);
+		line_number++;
+		errMessage(tokens, line_number);
+		free(line);
+		freeTokens(tokens);
+		exit(127);
 	}
+
+	token = strtok(pathCopy, ":");
+
 	while (token != NULL)
 	{
 		commandPath = malloc(myCustomStrlen(token)
 				+ myCustomStrlen(tokens[0]) + 2);
+		if (commandPath == NULL)
+		{
+			line_number++;
+			errMessage(tokens, line_number);
+			free(pathCopy);
+			free(line);
+			freeTokens(tokens);
+			exit(127);
+		}
 		myCustomStrcpy(commandPath, token);
 		myCustomStrcat(commandPath, "/"); /* Append a slash to directory path */
 		myCustomStrcat(commandPath, tokens[0]); /* Append command name to dir path */
-
-		if (commandPath == NULL)
-		{
-			perror("Error: Failed to allocate memory for commandPath.\n");
-			free(pathCopy);
-			exit(EXIT_FAILURE);
-		}
 		if (access(commandPath, X_OK) == 0)
 		{
 			free(pathCopy);
@@ -143,42 +165,54 @@ char *search_in_dir(char **tokens)
 /**
  * exe_in_dir - executes command found in path
  * @tokens: command and argument
- *
+ * @line: line read
  * Return: Null on success, nothing on error
  */
 
-char *exe_in_dir(char **tokens)
+char *exe_in_dir(char **tokens, char *line)
 {
 	char *path, *commandPath, *pathCopy, *token = NULL;
+	int line_number = 0;
 
 	path = myCustomGetenv("PATH");
 	pathCopy = myCustomStrdup(path);
-	token = strtok(pathCopy, ":");
 
 	if (pathCopy == NULL)
 	{
 		perror("Error: Failed to allocate memory for pathCopy.\n");
-		exit(EXIT_FAILURE);
+		free(line);
+		freeTokens(tokens);
+		exit(127);
 	}
+	token = strtok(pathCopy, ":");
 	while (token != NULL)
 	{
 		commandPath = malloc(myCustomStrlen(token)
 				+ myCustomStrlen(tokens[0]) + 2);
-		myCustomStrcpy(commandPath, token);
-		myCustomStrcat(commandPath, "/");
-		myCustomStrcat(commandPath, tokens[0]);
 
 		if (commandPath == NULL)
 		{
 			perror("Error: Failed to allocate memory for commandPath.\n");
-			exit(EXIT_FAILURE);
+			free(pathCopy);
+			free(line);
+			freeTokens(tokens);
+			exit(127);
 		}
+		myCustomStrcpy(commandPath, token);
+		myCustomStrcat(commandPath, "/");
+		myCustomStrcat(commandPath, tokens[0]);
+
 		if (access(commandPath, X_OK) == 0)
 		{
 			if ((execve(commandPath, tokens, environ) == -1))
 			{
-				perror("Error: No such file or directory.\n");
-				exit(EXIT_FAILURE);
+				line_number++;
+				errMessage(tokens, line_number);
+				free(commandPath);
+				free(pathCopy);
+				free(line);
+				freeTokens(tokens);
+				exit(127);
 			}
 		}
 		free(commandPath);
@@ -186,4 +220,26 @@ char *exe_in_dir(char **tokens)
 	}
 	free(pathCopy);
 	return (NULL);
+}
+
+/**
+ * remove_quotes - removes quotes so that a command can be executed
+ * @command: command
+ *
+ * Return: command without quotes
+ */
+
+char *remove_quotes(char *command)
+{
+	int i, j;
+	int len = myCustomStrlen(command);
+
+	for (i = 0, j = 0; i < len; i++)
+	{
+		if (command[i] != '\"')
+			command[j++] = command[i];
+	}
+	command[j] = '\0';
+
+	return(command);
 }
