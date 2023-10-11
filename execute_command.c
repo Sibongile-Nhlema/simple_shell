@@ -36,7 +36,7 @@ int execute_command(char **tokens, char *line)
 		}
 		if (pid == 0)
 		{
-			if ((execve(tokens[0], tokens, environ) == -1))
+			if ((execve(tokens[0], tokens, NULL) == -1))
 			{
 				if (myCustomStrchr(tokens[0], '/') != NULL)
 				{
