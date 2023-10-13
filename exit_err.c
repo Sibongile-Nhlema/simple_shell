@@ -56,3 +56,31 @@ void stringExitError(char *exe, char *string)
 
 	write(STDERR_FILENO, errorMessage, length);
 }
+/**
+ * printCdError - Prints an error if /root is cd's argument
+ *
+ * @exe: A pointer to the name of the executable
+ * @dir: A pointer to the directory/path string
+ */
+void printCdError(char *exe, char *dir)
+{
+	char errorMessage[100];
+	char *errMsgMiddle = ": 1: cd: can't cd to ";
+	int length;
+
+	length = 0;
+	while (*exe)
+		errorMessage[length++] = *exe++;
+
+	while (*errMsgMiddle)
+		errorMessage[length++] = *errMsgMiddle++;
+
+	while (*dir)
+		errorMessage[length++] = *dir++;
+
+	errorMessage[length++] = '\n';
+	errorMessage[length] = '\0';
+
+	write(STDERR_FILENO, errorMessage, length);
+
+}
