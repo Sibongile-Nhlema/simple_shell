@@ -47,12 +47,6 @@ int execute_command(char **tokens, char *line)
 				commandPath = exe_in_dir(tokens, line);
 				free(commandPath);
 			}
-			else
-			{
-				free(line);
-				freeTokens(tokens);
-				exit(127);
-			}
 		}
 		else
 		{
@@ -241,5 +235,5 @@ char *remove_quotes(char *command)
 	}
 	command[j] = '\0';
 
-	return(command);
+	return (command);
 }
