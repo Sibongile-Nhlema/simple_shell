@@ -43,3 +43,49 @@ char **splitLine(char *line)
 	free(lineCopy);
 	return (tokens);
 }
+/**
+ * splitLogicalLine - Splits a line with logical operators
+ *
+ * @line: A pointer to the line
+ *
+ * Return: 0 on success, nonzero on failure
+ */
+int splitLogicalLine(char *line)
+{
+	char token[1024], **tokens;
+	int ret, i = 0, j = 0;
+
+	while (line[i] != '\0')
+	{
+		if ((line[i] == '&' && line[i + 1] == '&')
+				|| (line[i] == '|' && line[i + 1] == '|'))
+		{
+			token[j] = '\0';
+			tokens = splitLine(token);
+
+			ret = execute_command(tokens, token);
+			freeTokens(tokens);
+			j = 0;
+
+			if (ret == 0 && line[i] == '|' && line[i + 1] == '|')
+			{
+				break;
+			}
+			if (ret != 0 && line[i] == '&' && line[i + 1] == '&')
+			{
+				break;
+			}
+			i += 2;
+		}
+		token[j] = line[i];
+		i++, j++;
+		if (line[i] == '\0')
+		{
+			token[j] = '\0';
+			tokens = splitLine(token);
+			ret = execute_command(tokens, token);
+			freeTokens(tokens);
+		}
+	}
+	return (ret);
+}
