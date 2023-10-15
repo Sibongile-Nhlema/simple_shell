@@ -17,7 +17,7 @@
 /* error handling */
 #include <errno.h>
 
-#define DELIM " \n\t\r\a"
+#define DELIM " \n\t"
 #define UNUSED(x) (void)(x)
 
 extern char **environ;
@@ -44,6 +44,9 @@ char **negativeStatusHandler(char *status, char *lineCopy, char *token);
 char **stringStatusHandler(char *status, char *lineCopy, char *token);
 int findExitStatus(char **tokens, char *line, char **argv);
 
+/*Logical Operators Implementation*/
+int splitLogicalLine(char *line);
+
 /* error message handling errPuts.c */
 void errMessage(char **tokens, int line_number);
 int errPutchar(char c);
@@ -67,6 +70,7 @@ char *myCustomStrncpy(char *destination, char *source, int n);
 char *myCustomStrcpy(char *destination, char *source);
 char *myCustomStrcat(char *destination, char *source);
 int myCustomStrncmp(const char *string1, const char *string2, int n);
+char *myCustomStrstr(char *string, char *substring);
 int myCustomAtoi(char *string);
 int myCustomIsSpace(int character);
 char *myCustomGetenv(char *varName);
