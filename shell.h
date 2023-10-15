@@ -66,7 +66,6 @@ int myCustomStrcmp(char *str1, char *str2);
 int myCustomStrlen(char *string);
 char *myCustomStrdup(char *string);
 char *myCustomStrchr(char *string, char character);
-char *myCustomStrncpy(char *destination, char *source, int n);
 char *myCustomStrcpy(char *destination, char *source);
 char *myCustomStrcat(char *destination, char *source);
 int myCustomStrncmp(const char *string1, const char *string2, int n);
