@@ -35,6 +35,13 @@ int main(int argc, char **argv)
 		}
 		free(lineCopy);
 		freeTokens(tokens); /*Free previous allocation*/
+		if (myCustomStrstr(line, "||") || myCustomStrstr(line, "&&"))
+		{
+			status = splitLogicalLine(line);
+			if (status)
+				free(line), exit(status);
+			continue;
+		}
 		tokens = splitLine(line); /*Split the line into tokens*/
 		if (strcmp(tokens[0], "cd") == 0)
 		{
