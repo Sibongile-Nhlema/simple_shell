@@ -3,8 +3,10 @@
 /**
  * myCustomStrstr - Finds the first occurrence of
  * the substring substring in a string
+ *
  * @string: A pointer to a string
  * @substring: A pointer to a substring
+ *
  * Return: A pointer to the start of the substring substring,
  * or NULL if not substring.
  */
