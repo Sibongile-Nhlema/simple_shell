@@ -31,7 +31,7 @@ void implementCdCommand(char **tokens, char **argv)
 		{
 			if (getcwd(currentDirectory, sizeof(currentDirectory)) == NULL)
 				perror("getcwd");
-			if (setenv("PWD", currentDirectory, 1) != 0)
+			if (myCustomSetenv("PWD", currentDirectory, 1) != 0)
 				perror("setenv");
 		}
 	}
@@ -49,7 +49,7 @@ void setOldPwd(void)
 	}
 	else
 	{
-		if (setenv("OLDPWD", previousDirectory, 1) != 0)
+		if (myCustomSetenv("OLDPWD", previousDirectory, 1) != 0)
 		{
 			perror("setenv");
 		}
@@ -72,7 +72,7 @@ void cdNoArgument(void)
 		}
 		else
 		{
-			if (setenv("PWD", home, 1) != 0)
+			if (myCustomSetenv("PWD", home, 1) != 0)
 			{
 				perror("setenv");
 			}
@@ -104,7 +104,7 @@ void handleCdDash(void)
 		{
 			if (getcwd(currentDirectory, sizeof(currentDirectory)) == NULL)
 				perror("getcwd");
-			if (setenv("PWD", currentDirectory, 1) != 0)
+			if (myCustomSetenv("PWD", currentDirectory, 1) != 0)
 				perror("setenv");
 			write(STDOUT_FILENO, currentDirectory, myCustomStrlen(currentDirectory));
 			write(STDOUT_FILENO, "\n", 1);

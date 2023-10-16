@@ -43,7 +43,7 @@ int myCustomSetenv(const char *name, const char *value, int overwrite)
 			environ = old_environ;
 			return (0);
 		}
-		else
+		else/*got rid of memory leak errors*/
 		{
 			free(new_var);
 			free(old_environ);
