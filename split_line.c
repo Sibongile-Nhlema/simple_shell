@@ -96,3 +96,49 @@ int splitLogicalLine(char *line)
 	}
 	return (ret);
 }
+
+/**
+ * separator - splits line with semi colon
+ * @line: pointer to the line
+ * Return: 0 on success, -1 on failure
+ */
+
+int splitSeparator(char *line)
+{
+	char token[1024], **tokens;
+	int ret = 0, i = 0, j = 0;
+	int command_ended_with_semicolon = 0;
+
+	while (line[i] != '\0')
+	{
+		if (line[i] == ';' /*&& line[i + 1] == '\0'*/)
+		{
+			token[j] = '\0';
+			if (token[0] != '\0')
+			{
+				tokens = splitLine(token, 1);
+				if (tokens != NULL)
+				{
+					ret = execute_command(tokens, token);
+					freeTokens(tokens); } }
+			command_ended_with_semicolon = 1;
+			if (command_ended_with_semicolon)
+				break;
+			j = 0;
+			i++;
+		}
+		token[j] = line[i];
+		i++, j++;
+		if ((line[i] == '\0'))
+		{
+			token[j] = '\0';
+			if (token[0] != '\0')
+			{
+				tokens = splitLine(token, 0);
+				if (tokens != NULL)
+				{
+					ret = execute_command(tokens, token);
+					freeTokens(tokens); } } }
+	}
+	return (ret);
+}
