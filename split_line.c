@@ -2,22 +2,21 @@
 
 /**
  * splitLine - Splits a line into tokens
+ *
  * @line: commands on commandline
+ * @status: The last command's exit status
  *
  * Return: An array of pointers to tokens
  */
-char **splitLine(char *line)
+char **splitLine(char *line, int status)
 {
-	char *lineCopy, *token, **tokens;
+	char *lineCopy, *token, **tokens, *modifiedToken = NULL;
 	int i;
 
 	lineCopy = myCustomStrdup(line);
 	token = strtok(line, DELIM);
 	if (myCustomStrcmp(token, "exit") == 0) /*Implement exit*/
-	{
-		tokens = implementExit(token, lineCopy);
-		return (tokens);
-	}
+		return (implementExit(token, lineCopy));
 	i = 0;
 	while (token != NULL) /*Count the tokens*/
 	{
@@ -34,13 +33,21 @@ char **splitLine(char *line)
 	token = strtok(lineCopy, DELIM); /*Add tokens to the tokens array*/
 	while (token != NULL)
 	{
-		tokens[i] = myCustomStrdup(token);
+		if (token[0] == '$')
+		{
+			modifiedToken = handleSubstitution(token, status);
+			tokens[i] = myCustomStrdup(modifiedToken);
+		}
+		else
+			tokens[i] = myCustomStrdup(token);
 		i++;
 		token = strtok(NULL, DELIM);
 	}
 	tokens[i] = NULL;
-
-	free(lineCopy);
+	if (lineCopy != NULL)
+		free(lineCopy);
+	if (modifiedToken != NULL)
+		free(modifiedToken);
 	return (tokens);
 }
 /**
@@ -61,7 +68,7 @@ int splitLogicalLine(char *line)
 				|| (line[i] == '|' && line[i + 1] == '|'))
 		{
 			token[j] = '\0';
-			tokens = splitLine(token);
+			tokens = splitLine(token, 0);
 
 			ret = execute_command(tokens, token);
 			freeTokens(tokens);
@@ -82,7 +89,7 @@ int splitLogicalLine(char *line)
 		if (line[i] == '\0')
 		{
 			token[j] = '\0';
-			tokens = splitLine(token);
+			tokens = splitLine(token, 0);
 			ret = execute_command(tokens, token);
 			freeTokens(tokens);
 		}
