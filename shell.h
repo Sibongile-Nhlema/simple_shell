@@ -97,5 +97,8 @@ char *const_strcat(char *destination, const char *source);
 char *const_getenv(const char *varName);
 char *const_strcpy(char *destination, const char *source);
 
+/* Custom  Memory Management Functions*/
+void *myCustom_realloc(void *ptr, size_t size);
+void *myCustom_memcpy(void *dest, const void *src, size_t size);
 
 #endif
