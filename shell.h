@@ -50,6 +50,9 @@ int splitLogicalLine(char *line);
 /* remove comments implementaion*/
 void remove_comments_from_line(char *string);
 
+/* Environment changes*/
+int myCustomUnsetenv(const char *name);
+
 /* error message handling errPuts.c */
 void errMessage(char **tokens, int line_number);
 int errPutchar(char c);
@@ -79,5 +82,8 @@ char *myCustomGetenv(char *varName);
 int myCustomSetenv(const char *name, const char *value, int overwrite);
 ssize_t myCustomGetline(char **lineptr, size_t *n);
 
+/* custom constant string functions*/
+int const_strncmp(char *string1, const char *string2, size_t number);
+int const_strlen(const char *string);
 
 #endif
