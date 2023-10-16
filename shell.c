@@ -12,7 +12,7 @@
 int main(int argc, char **argv)
 {
 	char *line = NULL, *lineCopy = NULL, **tokens = NULL;
-	int status;
+	int status = 0;
 	size_t lineSize = 0;
 
 	UNUSED(argc);
@@ -24,25 +24,20 @@ int main(int argc, char **argv)
 		{
 			if (feof(stdin))
 				break;
-			perror("getline");
-			exit(EXIT_FAILURE);
-		}
-		lineCopy = myCustomStrdup(line);
+			perror("getline"), exit(EXIT_FAILURE);
+		} lineCopy = myCustomStrdup(line);
 		if (checkEmptyInput(lineCopy))
 		{
 			free(lineCopy);
 			continue;
-		}
-		free(lineCopy);
-		freeTokens(tokens); /*Free previous allocation*/
+		} free(lineCopy), freeTokens(tokens); /*Free previous allocation*/
 		if (myCustomStrstr(line, "||") || myCustomStrstr(line, "&&"))
 		{
 			status = splitLogicalLine(line);
 			if (status)
 				free(line), exit(status);
 			continue;
-		}
-		tokens = splitLine(line); /*Split the line into tokens*/
+		} tokens = splitLine(line, status); /*Split the line into tokens*/
 		if (strcmp(tokens[0], "cd") == 0)
 		{
 			implementCdCommand(tokens, argv);
@@ -57,21 +52,16 @@ int main(int argc, char **argv)
 		{
 			if (tokens[1] != NULL && (myCustomAtoi(tokens[1]) > 0 ||
 						myCustomAtoi(tokens[1]) < 0 || myCustomAtoi(tokens[1]) == 0))
-			{
-				status = findExitStatus(tokens, line, argv);
-				exit(status);
-			}
+				status = findExitStatus(tokens, line, argv), exit(status);
 			break;
 		}
 		if (tokens == NULL)
 		{
 			free(line);
 			continue;
-		}
-		status = execute_command(tokens, line);
+		} status = execute_command(tokens, line);
 		if (status)
 			free(line), freeTokens(tokens), exit(status);
-	}
-	free(line), freeTokens(tokens);
+	} free(line), freeTokens(tokens);
 	return (0);
 }
