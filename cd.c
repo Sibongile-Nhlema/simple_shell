@@ -1,8 +1,5 @@
 #include "shell.h"
 
-char previousDirectory[1024];
-char currentDirectory[1024];
-
 /**
  * implementCdCommand - Implements the cd built-in command
  *
@@ -11,6 +8,8 @@ char currentDirectory[1024];
  */
 void implementCdCommand(char **tokens, char **argv)
 {
+	char currentDirectory[1024];
+
 	if (tokens[1] == NULL) /*If cd has no arguments*/
 	{
 		cdNoArgument();
@@ -42,6 +41,8 @@ void implementCdCommand(char **tokens, char **argv)
  */
 void setOldPwd(void)
 {
+	char previousDirectory[1024];
+
 	if (getcwd(previousDirectory, sizeof(previousDirectory)) == NULL)
 	{
 		perror("getcwd");
@@ -87,6 +88,8 @@ void cdNoArgument(void)
  */
 void handleCdDash(void)
 {
+	char currentDirectory[1024];
+
 	if (myCustomGetenv("OLDPWD") == NULL)
 	{
 		write(STDOUT_FILENO, myCustomGetenv("PWD"),
