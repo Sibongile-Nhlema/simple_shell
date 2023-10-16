@@ -33,6 +33,12 @@ int main(int argc, char **argv)
 			free(lineCopy);
 			continue;
 		}
+		remove_comments_from_line(line);
+		if (line[0] == '\0')
+		{
+			free(lineCopy);
+			continue;
+		}
 		free(lineCopy);
 		freeTokens(tokens); /*Free previous allocation*/
 		if (myCustomStrstr(line, "||") || myCustomStrstr(line, "&&"))
