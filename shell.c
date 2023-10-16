@@ -63,6 +63,12 @@ int main(int argc, char **argv)
 			printEnvironment();
 			continue;
 		}
+		if (myCustomStrcmp(tokens[0], "setenv") == 0)
+		{
+			if (tokens[1] != NULL)
+				myCustomSetenv(tokens[1], tokens[2], 1);
+			continue;
+		}
 		if (myCustomStrcmp(tokens[0], "unsetenv") == 0)
 		{
 			if (tokens[1] != NULL)
