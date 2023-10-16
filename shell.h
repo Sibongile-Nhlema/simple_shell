@@ -47,6 +47,9 @@ int findExitStatus(char **tokens, char *line, char **argv);
 /*Logical Operators Implementation*/
 int splitLogicalLine(char *line);
 
+/* remove comments implementaion*/
+void remove_comments_from_line(char *string);
+
 /* error message handling errPuts.c */
 void errMessage(char **tokens, int line_number);
 int errPutchar(char c);
