@@ -59,6 +59,12 @@ int main(int argc, char **argv)
 			printEnvironment();
 			continue;
 		}
+		if (myCustomStrcmp(tokens[0], "unsetenv") == 0)
+		{
+			if (tokens[1] != NULL)
+				myCustomUnsetenv(tokens[1]);
+			continue;
+		}
 		if (myCustomStrcmp(tokens[0], "exit") == 0) /*Implement exit built-in*/
 		{
 			if (tokens[1] != NULL && (myCustomAtoi(tokens[1]) > 0 ||
