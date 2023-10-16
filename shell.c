@@ -30,7 +30,15 @@ int main(int argc, char **argv)
 		{
 			free(lineCopy);
 			continue;
-		} free(lineCopy), freeTokens(tokens); /*Free previous allocation*/
+		}
+		remove_comments_from_line(line);
+		if (line[0] == '\0')
+		{
+			free(lineCopy);
+			continue;
+		}
+		free(lineCopy);
+		freeTokens(tokens); /*Free previous allocation*/
 		if (myCustomStrstr(line, "||") || myCustomStrstr(line, "&&"))
 		{
 			status = splitLogicalLine(line);
@@ -46,6 +54,12 @@ int main(int argc, char **argv)
 		if (strcmp(tokens[0], "env") == 0)
 		{
 			printEnvironment();
+			continue;
+		}
+		if (myCustomStrcmp(tokens[0], "unsetenv") == 0)
+		{
+			if (tokens[1] != NULL)
+				myCustomUnsetenv(tokens[1]);
 			continue;
 		}
 		if (myCustomStrcmp(tokens[0], "exit") == 0) /*Implement exit built-in*/
