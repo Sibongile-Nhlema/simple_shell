@@ -27,7 +27,7 @@ int myCustomSetenv(const char *name, const char *value, int overwrite)
 	while (environ[environ_size] != NULL)
 		environ_size++;
 	old_environ = (char **)malloc((environ_size + 1) * sizeof(char *));
-	myCustom_memcpy(old_environ, environ, (environ_size + 1) * sizeof(char *));
+	memcpy(old_environ, environ, (environ_size + 1) * sizeof(char *));
 	index = 0; /*find position of env var in environ array*/
 	while (old_environ[index] != NULL)
 	{
@@ -42,7 +42,7 @@ int myCustomSetenv(const char *name, const char *value, int overwrite)
 			return (0);
 		}
 		index++; }
-	new_environ = (char **)myCustom_realloc(old_environ, (index + 2) * sizeof(char *));
+	new_environ = (char **)realloc(old_environ, (index + 2) * sizeof(char *));
 	if (new_environ == NULL)
 	{
 		free(old_environ), free(new_var);
