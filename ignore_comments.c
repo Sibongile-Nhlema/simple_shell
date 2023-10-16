@@ -13,7 +13,7 @@ void remove_comments_from_line(char *string)
 
 	for (r = 0; string[r] != '\0'; r++)
 	{
-		if ((r == 0 && string[r] == '#') || 
+		if ((r == 0 && string[r] == '#') ||
 				(r > 0 && string[r] == '#' && string[r - 1] == ' '))
 		{
 			string[r] = '\0';
