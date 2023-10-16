@@ -47,6 +47,8 @@ int findExitStatus(char **tokens, char *line, char **argv);
 /*Logical Operators Implementation*/
 int splitLogicalLine(char *line);
 
+/* Command Separator Implemention*/
+int separator(char *line);
 
 /*Variable Substitution*/
 char *handleSubstitution(char *token, int status);
