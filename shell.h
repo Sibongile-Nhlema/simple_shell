@@ -47,6 +47,11 @@ int findExitStatus(char **tokens, char *line, char **argv);
 /*Logical Operators Implementation*/
 int splitLogicalLine(char *line);
 
+/*Variable Substitution*/
+char *handleSubstitution(char *token, int status);
+void reverseString(char *string);
+void intToStr(char *string, int number, int index);
+
 /* error message handling errPuts.c */
 void errMessage(char **tokens, int line_number);
 int errPutchar(char c);
@@ -55,7 +60,7 @@ int printDecimal(int input, int fd);
 int ourPutChar(char c);
 
 /*Other functions*/
-char **splitLine(char *line);
+char **splitLine(char *line, int status);
 void freeTokens(char **tokens);
 void search_and_execute_command(char **tokens);
 void printEnvironment(void);
