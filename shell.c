@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 		freeTokens(tokens); /*Free previous allocation*/
 		if (myCustomStrstr(line, ";"))
 		{
-			status = separator(line);
+			status = splitSeparator(line);
 			if (status)
 				free(line), exit(status);
 			continue;

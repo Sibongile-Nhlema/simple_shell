@@ -103,7 +103,7 @@ int splitLogicalLine(char *line)
  * Return: 0 on success, -1 on failure
  */
 
-int separator(char *line)
+int splitSeparator(char *line)
 {
 	char token[1024], **tokens;
 	int ret = 0, i = 0, j = 0;
@@ -116,33 +116,16 @@ int separator(char *line)
 			token[j] = '\0';
 			if (token[0] != '\0')
 			{
-				tokens = splitLine(token, 0);
+				tokens = splitLine(token, 1);
 				if (tokens != NULL)
 				{
 					ret = execute_command(tokens, token);
-					freeTokens(tokens);
-				}
-			}
+					freeTokens(tokens); } }
 			command_ended_with_semicolon = 1;
 			if (command_ended_with_semicolon)
 				break;
 			j = 0;
 			i++;
-		}
-		if (line[i] == ';')
-		{
-			token[j] = '\0';
-			if (token[0] != '\0')
-			{
-				tokens = splitLine(token, 0);
-				if (tokens != NULL)
-				{
-					ret = execute_command(tokens, token);
-					freeTokens(tokens);
-				}
-			}
-			j = 0;
-			j = 0;
 		}
 		token[j] = line[i];
 		i++, j++;
@@ -155,10 +138,7 @@ int separator(char *line)
 				if (tokens != NULL)
 				{
 					ret = execute_command(tokens, token);
-					freeTokens(tokens);
-				}
-			}
-		}
+					freeTokens(tokens); } } }
 	}
 	return (ret);
 }
