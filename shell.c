@@ -9,13 +9,12 @@
  *
  * Return: 0
  */
-int main(int argc, char **argv)
+int main(int argc __attribute__((unused)), char **argv)
 {
 	char *line = NULL, *lineCopy = NULL, **tokens = NULL;
 	int status = 0;
 	size_t lineSize = 0;
 
-	UNUSED(argc);
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
