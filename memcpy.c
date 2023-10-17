@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * myCustom_mempy - copy the contents from the
+ * myCustom_memcpy - copy the contents from the
  * old memory block to the new memory
  * @dest: destination
  * @src: source
