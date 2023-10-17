@@ -1,5 +1,6 @@
 #include "shell.h"
 
+void printPrompt(void);
 
 /**
  * main - Acts as a command line interpreter
@@ -17,8 +18,7 @@ int main(int argc __attribute__((unused)), char **argv)
 
 	while (1)
 	{
-		if (isatty(STDIN_FILENO))
-			write(STDOUT_FILENO, "$ ", 2);
+		printPrompt();
 		if (getline(&line, &lineSize, stdin) == -1) /*Read a line from stdin*/
 		{
 			if (feof(stdin))
@@ -90,4 +90,13 @@ int main(int argc __attribute__((unused)), char **argv)
 			free(line), freeTokens(tokens), exit(status);
 	} free(line), freeTokens(tokens);
 	return (0);
+}
+
+/**
+ * printPrompt - displays prompt to stdout
+ */
+void printPrompt(void)
+{
+	if (isatty(STDIN_FILENO))
+		write(STDOUT_FILENO, "$ ", 2);
 }
