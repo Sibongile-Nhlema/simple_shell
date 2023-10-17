@@ -75,6 +75,10 @@ void freeTokens(char **tokens);
 void search_and_execute_command(char **tokens);
 void printEnvironment(void);
 int checkEmptyInput(char *line);
+void checkLine(char *line, int *status2);
+void checkTokens(char **tokens, char **argv, char *line, int *status2);
+void printPrompt(void);
+int emptyHandler(char *line);
 
 /*Custom Functions*/
 int myCustomStrcmp(char *str1, char *str2);

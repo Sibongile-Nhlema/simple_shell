@@ -57,21 +57,21 @@ int findExitStatus(char **tokens, char *line, char **argv)
 	{
 		status = myCustomAtoi(tokens[1]);
 		free(line);
-		freeTokens(tokens);
+		/* freeTokens(tokens); */
 		return (status);
 	}
 	if (tokens[1] != NULL && myCustomAtoi(tokens[1]) < 0)
 	{
 		free(line);
 		negativeExitError(argv[0], tokens[1]);
-		freeTokens(tokens);
+		/* freeTokens(tokens); */
 		return (2);
 	}
 	if (tokens[1] != NULL && myCustomAtoi(tokens[1]) == 0)
 	{
 		free(line);
 		stringExitError(argv[0], tokens[1]);
-		freeTokens(tokens);
+		/* freeTokens(tokens); */
 	}
 	return (2);
 }
