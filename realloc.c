@@ -2,8 +2,11 @@
 
 /**
  * myCustom_realloc - reallocates memory
+ *
  * @ptr: pointer to the memory block
  * @size: size of the argument
+ *
+ * Return: A void pointer to a block of memory
  */
 
 void *myCustom_realloc(void *ptr, size_t size)
