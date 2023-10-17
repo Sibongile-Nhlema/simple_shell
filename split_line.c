@@ -98,11 +98,12 @@ int splitLogicalLine(char *line)
 }
 
 /**
- * separator - splits line with semi colon
+ * splitSeparator - splits line with semi colon
+ *
  * @line: pointer to the line
+ *
  * Return: 0 on success, -1 on failure
  */
-
 int splitSeparator(char *line)
 {
 	char token[1024], **tokens;
