@@ -1,7 +1,5 @@
 #include "shell.h"
 
-extern char **environ;
-
 /**
  * myCustomUnsetenv - deletes an environment variable
  * @name: name of variable
