@@ -108,7 +108,6 @@ int splitSeparator(char *line)
 {
 	char token[1024], **tokens;
 	int ret = 0, i = 0, j = 0;
-	int command_ended_with_semicolon = 0;
 
 	while (line[i] != '\0')
 	{
@@ -122,15 +121,16 @@ int splitSeparator(char *line)
 				{
 					ret = execute_command(tokens, token);
 					freeTokens(tokens); } }
-			command_ended_with_semicolon = 1;
-			if (command_ended_with_semicolon)
+			if (line[i + 1] == '\0' || line[i + 2] == '\0')
+			{
 				break;
+			}
 			j = 0;
 			i++;
 		}
 		token[j] = line[i];
 		i++, j++;
-		if ((line[i] == '\0'))
+		if (line[i] == '\0')
 		{
 			token[j] = '\0';
 			if (token[0] != '\0')
