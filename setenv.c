@@ -9,12 +9,11 @@
  * Return: 0 on success, -1 on error
  */
 
-int myCustomSetenv(const char *name, const char *value, int overwrite)
+int myCustomSetenv(const char *name, const char *value, int overwrite __attribute__((unused)))
 {
 	char **new_environ = NULL, **old_environ = NULL, *new_var = NULL;
 	size_t len;
 	int index, environ_size = 0;
-	(void)overwrite;
 
 	if (name == NULL || value == NULL)/*find length of new env var*/
 		return (-1); /*avoid segmentation fault*/
@@ -42,7 +41,8 @@ int myCustomSetenv(const char *name, const char *value, int overwrite)
 			return (0);
 		}
 		index++; }
-	new_environ = (char **)myCustom_realloc(old_environ, (index + 2) * sizeof(char *));
+	new_environ = (char **)myCustom_realloc(old_environ,
+			(index + 2) * sizeof(char *));
 	if (new_environ == NULL)
 	{
 		free(old_environ), free(new_var);
