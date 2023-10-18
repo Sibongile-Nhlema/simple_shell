@@ -9,7 +9,8 @@
  * Return: 0 on success, -1 on error
  */
 
-int myCustomSetenv(const char *name, const char *value, int overwrite __attribute__((unused)))
+int myCustomSetenv(const char *name, const char *value,
+		int overwrite __attribute__((unused)))
 {
 	char **new_environ = NULL, **old_environ = NULL, *new_var = NULL;
 	size_t len;
